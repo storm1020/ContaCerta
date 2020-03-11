@@ -47,8 +47,10 @@ namespace PayGo_ContaCerta.Forms
             OpenFileDialog openFile = new OpenFileDialog();
             EntradaArquivo etd = new EntradaArquivo();
             List<ModeloArquivo> lstModeloArquivo = new List<ModeloArquivo>();
-            List<ModeloArquivoSaida> mdlArqSaida = new List<ModeloArquivoSaida>();
+            List<ModeloArquivoSaida> lstMdlArqSaida = new List<ModeloArquivoSaida>();
             SaidaArquivo saidArq = new SaidaArquivo();
+            ModeloArquivoSaida mdlArqSaida = new ModeloArquivoSaida();
+
 
             //Gerar Key antes de consumir outros metodos.
             var response = string.Empty;
@@ -63,11 +65,22 @@ namespace PayGo_ContaCerta.Forms
                     response = await RestHelper.Post_MultContaBasica(item.GetNome(), item.GetCpfCnpj(), item.GetBankCode(), item.GetAgency(),
                                                                          item.GetAgencyDigit(), item.GetAccount(), item.GetAccountDigit(),
                                                                          item.GetAccountType(), item.GetIntegrationId());
+                    string trataRsp = RestHelper.BeautifyJson(response);
+                    mdlArqSaida = saidArq.PreencherModeloDeArquivoSaida(trataRsp); // Preencher objetos antes de gravar.
+                    lstMdlArqSaida.Add(mdlArqSaida); // Add objetos preenchidos para gravar.
 
-                    //string tst = RestHelper.BeautifyJson(response);
-
-                    saidArq.CriarArquivoDeRetorno(response);
                 }
+
+                bool processou = saidArq.CriarArquivoDeRetorno(lstMdlArqSaida);
+
+                if (processou)
+                {
+                    MessageBox.Show("Resultado criado! Verifique o caminho: C:/ResultadoTransfeera");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecione um arquivo.");
             }
         }
     }

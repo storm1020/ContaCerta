@@ -13,46 +13,52 @@ namespace PayGo_ContaCerta
         private string diretorio = @"C:\ResultadoTransfeera\";
 
         // Escrita de arquivo
-        public void CriarArquivoDeRetorno(string resposta)
+        public bool CriarArquivoDeRetorno(List<ModeloArquivoSaida> LstMdlArqSaida)
         {
-            ModeloArquivoSaida modeloArq = new ModeloArquivoSaida();
+            bool rtrn = true;
+            string msg = string.Empty;
 
             if (!Directory.Exists(diretorio))
             {
                 Directory.CreateDirectory(diretorio);
+                MessageBox.Show("Pasta de resultado criada no repositório: C:/ResultadoTransfeera");
             }
 
             string fileName = diretorio + "result" + GetDataEhConcatena() + ".csv";
+            string titles = "NOME;CPFCNPJ;CODIGO_BANCO;AGENCIA;DIGITO_AGENCIA;CONTA;DIGITO_CONTA;TIPO_CONTA;ERROS;CONTA_VALIDA?";
 
-            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate);
-
+            FileStream stream = new FileStream(fileName, FileMode.Create);
             try
             {
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8 ))
+                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                 {
-                    modeloArq = PreencherModeloDeArquivoSaida(resposta);
+                    writer.WriteLine(titles);
 
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetNome() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetCpfCnpj() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetBankCode() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetAgency() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetAgencyDigit() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetAccount() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetAccountDigit() );
-                    writer.WriteLine(modeloArq.GetModeloArquivo().GetAccountType() );
-                    writer.WriteLine(modeloArq.GetErrors() );
-                    writer.WriteLine(TrataDescricaoContaValida(modeloArq.GetValidation()) );
-                    writer.WriteLine("-------------------------------------------------------");
-
+                    foreach (var item in LstMdlArqSaida)
+                    {
+                        writer.WriteLine(
+                                         item.GetModeloArquivo().GetNome().Replace("\"", "").Replace("name:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetCpfCnpj().Replace("\"", "").Replace("cpf_cnpj:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetBankCode().Replace("\"", "").Replace("bank_code:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetAgency().Replace("\"", "").Replace("agency:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetAgencyDigit().Replace("\"", "").Replace("agency_digit:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetAccount().Replace("\"", "").Replace("account:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetAccountDigit().Replace("\"", "").Replace("account_digit:", "").Trim() + ";" +
+                                         item.GetModeloArquivo().GetAccountType().Replace("\"", "").Replace("account_type:", "").Trim() + ";" +
+                                         item.GetErrors().Replace("\"", "").Replace("errors:", "").Trim() + ";" +
+                                         TrataDescricaoContaValida(item.GetValidation())
+                                         );
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Falha ao criar arquivo de resultado(s), erro: {0}", ex.Message));
+                rtrn = false;
+                MessageBox.Show(string.Format("Falha ao criar arquivo de resultado(s), erro(s): {0}", ex.Message));
                 throw;
             }
 
-            //return LstModelArq;
+            return rtrn;
         }
 
         private string TrataDescricaoContaValida(string desc)
@@ -61,11 +67,11 @@ namespace PayGo_ContaCerta
 
             if (desc.Contains("true"))
             {
-                descTratada = "Validação: Conta Válida!";
+                descTratada = "Conta Válida!";
             }
             else
             {
-                descTratada = "Validação: Conta Invalida!";
+                descTratada = "Conta Invalida!";
             }
 
             return descTratada;
@@ -76,12 +82,15 @@ namespace PayGo_ContaCerta
             string dia = DateTime.Now.Day.ToString();
             string mes = DateTime.Now.Month.ToString();
             string ano = DateTime.Now.Year.ToString();
-            string concatDate = Convert.ToString(dia + mes + ano);
+            string hora = DateTime.Now.Hour.ToString();
+            string minuto = DateTime.Now.Minute.ToString();
+            string segundo = DateTime.Now.Second.ToString();
+            string concatDate = Convert.ToString(dia + mes + ano + hora + minuto + segundo);
 
             return concatDate;
         }
 
-        private ModeloArquivoSaida PreencherModeloDeArquivoSaida(string resposta)
+        public ModeloArquivoSaida PreencherModeloDeArquivoSaida(string resposta)
         {
             ModeloArquivoSaida mdsd = new ModeloArquivoSaida();
             mdsd.ModeloArquivo = new ModeloArquivo();
@@ -121,7 +130,7 @@ namespace PayGo_ContaCerta
             return mdsd;
         }
 
-        private string TrataLinhaDeArquivoRetorno(string conteudo)
+        public string TrataLinhaDeArquivoRetorno(string conteudo)
         {
             string retorno = string.Empty;
 
@@ -130,6 +139,12 @@ namespace PayGo_ContaCerta
             retorno = retorno.Replace("\n", "");
 
             retorno = retorno.Replace("{", "");
+
+            retorno = retorno.Replace("}", "");
+
+            retorno = retorno.Replace("[", "");
+
+            retorno = retorno.Replace("]", "");
 
             return retorno;
         }

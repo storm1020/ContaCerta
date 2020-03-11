@@ -51,7 +51,7 @@ namespace PayGo_ContaCerta
                 string agencyDigit = linhaSplit[4].ToString();
                 string account = linhaSplit[5].ToString();
                 string accountDigit = linhaSplit[6].ToString();
-                string accountType = linhaSplit[7].ToString();
+                string accountType = RetornaTipoConta(linhaSplit[7].ToString());
                 string integrationId = linhaSplit[8].ToString();
 
                 modeloArquivo = new ModeloArquivo(nome, cpfCnpj, bankCode, agency, agencyDigit, account, accountDigit,
@@ -59,6 +59,24 @@ namespace PayGo_ContaCerta
             }
 
             return modeloArquivo;
+        }
+
+        private string RetornaTipoConta(string tpConta)
+        {
+            string contaTratada = string.Empty;
+
+            switch (tpConta)
+            {
+                case "1":
+                    contaTratada = "CONTA_CORRENTE";
+                    break;
+
+                case "2":
+                    contaTratada = "CONTA_POUPANCA";
+                    break;
+            }
+
+            return contaTratada;
         }
     }
 }
