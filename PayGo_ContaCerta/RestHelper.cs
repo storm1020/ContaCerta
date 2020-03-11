@@ -54,6 +54,7 @@ namespace PayGo_ContaCerta
             return string.Empty;
         }
 
+        // Realizar teste microdeposito
         public static async Task<string> Post_MicroDeposito(string name, string cpfCnpj, string bankCode, string agc, string agcDigit,
             string acct, string acctDigit, string acctType, string itgId)
         {
@@ -93,18 +94,32 @@ namespace PayGo_ContaCerta
             return string.Empty;
         }
 
-        public static async Task<string> Post_MicroDeposito(string url)
+        public static async Task<string> Post_MultContaBasica(string name, string cpfCnpj, string bankCode, string agc, string agcDigit,
+            string acct, string acctDigit, string acctType, string itgId)
         {
             var inputData = new Dictionary<string, string>
             {
-                {"url", url}
+                {"name", name},
+                {"cpf_cnpj", cpfCnpj},
+                {"bank_code", bankCode},
+                {"agency", agc},
+                {"agency_digit", agcDigit},
+                {"account", acct},
+                {"account_digit", acctDigit},
+                {"account_type", acctType},
+                {"integration_id", itgId}
             };
 
+            //Formata dados de acordo com necessidade de envio.
             var input = new FormUrlEncodedContent(inputData);
 
             using (HttpClient client = new HttpClient())
             {
-                using (HttpResponseMessage res = await client.PostAsync(baseURL + "webhook", input))
+                client.BaseAddress = new Uri(baseURLContaCerta);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(keyAutorization);
+
+                using (HttpResponseMessage res = await client.PostAsync(baseURLContaCerta + "validate?type=BASICA", input))
                 {
                     using (HttpContent content = res.Content)
                     {
@@ -116,6 +131,7 @@ namespace PayGo_ContaCerta
                     }
                 }
             }
+
             return string.Empty;
         }
 

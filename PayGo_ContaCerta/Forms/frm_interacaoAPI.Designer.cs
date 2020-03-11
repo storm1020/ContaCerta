@@ -30,7 +30,7 @@
         {
             this.btn_Post = new System.Windows.Forms.Button();
             this.txt_PostResponse = new System.Windows.Forms.TextBox();
-            this.txt_TempoKey = new System.Windows.Forms.TextBox();
+            this.btn_import = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Post
@@ -51,19 +51,22 @@
             this.txt_PostResponse.Size = new System.Drawing.Size(333, 103);
             this.txt_PostResponse.TabIndex = 1;
             // 
-            // txt_TempoKey
+            // btn_import
             // 
-            this.txt_TempoKey.Location = new System.Drawing.Point(190, 300);
-            this.txt_TempoKey.Name = "txt_TempoKey";
-            this.txt_TempoKey.Size = new System.Drawing.Size(100, 20);
-            this.txt_TempoKey.TabIndex = 2;
+            this.btn_import.Location = new System.Drawing.Point(271, 326);
+            this.btn_import.Name = "btn_import";
+            this.btn_import.Size = new System.Drawing.Size(75, 23);
+            this.btn_import.TabIndex = 2;
+            this.btn_import.Text = "Importar";
+            this.btn_import.UseVisualStyleBackColor = true;
+            this.btn_import.Click += new System.EventHandler(this.btn_import_Click);
             // 
             // frm_interacaoAPI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.txt_TempoKey);
+            this.Controls.Add(this.btn_import);
             this.Controls.Add(this.txt_PostResponse);
             this.Controls.Add(this.btn_Post);
             this.Name = "frm_interacaoAPI";
@@ -77,6 +80,6 @@
 
         private System.Windows.Forms.Button btn_Post;
         private System.Windows.Forms.TextBox txt_PostResponse;
-        private System.Windows.Forms.TextBox txt_TempoKey;
+        private System.Windows.Forms.Button btn_import;
     }
 }
