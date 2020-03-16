@@ -12,8 +12,8 @@ namespace PayGo_ContaCerta
 {
     public static class RestHelper
     {
-        private static readonly string baseURL = "https://login-api-sandbox.transfeera.com/";
-        private static readonly string baseURLContaCerta = "https://contacerta-api-sandbox.transfeera.com/";
+        private static readonly string baseURL = "https://login-api.transfeera.com/";
+        private static readonly string baseURLContaCerta = "https://contacerta-api.transfeera.com/";
         private static string keyAutorization;
 
         private static void SetKeyAutorization(string key)

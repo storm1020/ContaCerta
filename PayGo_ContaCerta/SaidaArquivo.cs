@@ -103,29 +103,34 @@ namespace PayGo_ContaCerta
 
             string[] rspSplt = rspTratada.Split(',');
 
-            string nome = rspSplt[0];
-            string cpfcnpj = rspSplt[1];
-            string bankcode = rspSplt[2];
-            string agency = rspSplt[3];
-            string agencyDigit = rspSplt[4];
-            string account = rspSplt[5];
-            string accountDigit = rspSplt[6];
-            string accountType = rspSplt[7];
-            string integrationId = rspSplt[8];
-            string errors = rspSplt[10];
-            string validation = rspSplt[9];
+            if (rspSplt.Length >= 8)
+            {
+                string nome = rspSplt[0];
+                string cpfcnpj = rspSplt[1];
+                string bankcode = rspSplt[2];
+                string agency = rspSplt[3];
+                string agencyDigit = rspSplt[4];
+                string account = rspSplt[5];
+                string accountDigit = rspSplt[6];
+                string accountType = rspSplt[7];
+                string integrationId = rspSplt[8];
+                string errors = rspSplt[10];
+                string validation = rspSplt[9];
 
-            mdsd.ModeloArquivo.Nome = nome;
-            mdsd.ModeloArquivo.Cpf_Cnpj = cpfcnpj;
-            mdsd.ModeloArquivo.Bank_Code = bankcode;
-            mdsd.ModeloArquivo.Agency = agency;
-            mdsd.ModeloArquivo.Agency_digit = agencyDigit;
-            mdsd.ModeloArquivo.Account = account;
-            mdsd.ModeloArquivo.Account_digit = accountDigit;
-            mdsd.ModeloArquivo.Account_type = accountType;
-            mdsd.ModeloArquivo.Integration_id = integrationId;
-            mdsd.Errors = errors;
-            mdsd.Validation = validation;
+
+
+                mdsd.ModeloArquivo.Nome = nome;
+                mdsd.ModeloArquivo.Cpf_Cnpj = cpfcnpj;
+                mdsd.ModeloArquivo.Bank_Code = bankcode;
+                mdsd.ModeloArquivo.Agency = agency;
+                mdsd.ModeloArquivo.Agency_digit = agencyDigit;
+                mdsd.ModeloArquivo.Account = account;
+                mdsd.ModeloArquivo.Account_digit = accountDigit;
+                mdsd.ModeloArquivo.Account_type = accountType;
+                mdsd.ModeloArquivo.Integration_id = integrationId;
+                mdsd.Errors = errors;
+                mdsd.Validation = validation;
+            }
 
             return mdsd;
         }

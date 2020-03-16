@@ -44,15 +44,15 @@ namespace PayGo_ContaCerta
             {
                 string[] linhaSplit = linhaArquivo.Split(';');
 
-                string nome = linhaSplit[0].ToString();
-                string cpfCnpj = linhaSplit[1].ToString();
-                string bankCode = linhaSplit[2].ToString();
-                string agency = linhaSplit[3].ToString();
-                string agencyDigit = linhaSplit[4].ToString();
-                string account = linhaSplit[5].ToString();
-                string accountDigit = linhaSplit[6].ToString();
-                string accountType = RetornaTipoConta(linhaSplit[7].ToString());
-                string integrationId = linhaSplit[8].ToString();
+                string nome = TrataItemArquivoEntrada(linhaSplit[0].ToString()).Trim();
+                string cpfCnpj = TrataItemArquivoEntrada(linhaSplit[1].ToString()).Trim();
+                string bankCode = TrataItemArquivoEntrada(linhaSplit[2].ToString()).Trim();
+                string agency = TrataItemArquivoEntrada(linhaSplit[3].ToString()).Trim();
+                string agencyDigit = TrataItemArquivoEntrada(linhaSplit[4].ToString()).Trim();
+                string account = TrataItemArquivoEntrada(linhaSplit[5].ToString()).Trim();
+                string accountDigit = TrataItemArquivoEntrada(linhaSplit[6].ToString()).Trim();
+                string accountType = TrataItemArquivoEntrada(RetornaTipoConta(linhaSplit[7].ToString())).Trim();
+                string integrationId = TrataItemArquivoEntrada(linhaSplit[8].ToString()).Trim();
 
                 modeloArquivo = new ModeloArquivo(nome, cpfCnpj, bankCode, agency, agencyDigit, account, accountDigit,
                                                   accountType, integrationId);
@@ -77,6 +77,35 @@ namespace PayGo_ContaCerta
             }
 
             return contaTratada;
+        }
+
+        private string TrataItemArquivoEntrada(string conteudo)
+        {
+            string retorno = string.Empty;
+
+            retorno = conteudo.Replace("\r", "");
+
+            retorno = retorno.Replace("\n", "");
+
+            retorno = retorno.Replace("{", "");
+
+            retorno = retorno.Replace("}", "");
+
+            retorno = retorno.Replace("[", "");
+
+            retorno = retorno.Replace("]", "");
+
+            retorno = retorno.Replace("\"", "");
+
+            retorno = retorno.Replace(".", "");
+
+            retorno = retorno.Replace("-", "");
+
+            retorno = retorno.Replace(":", "");
+
+            retorno = retorno.Replace(",", "");
+
+            return retorno;
         }
     }
 }
